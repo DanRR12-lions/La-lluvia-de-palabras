@@ -56,24 +56,24 @@ document.addEventListener("click", e => {
     const palabra = document.createElement("div");
     palabra.textContent = "te quiero";
     palabra.className = "word";
+    palabra.style.position = "absolute";
     palabra.style.left = e.clientX + "px";
     palabra.style.top = e.clientY + "px";
-    palabra.style.position = "absolute";
+    palabra.style.opacity = "1";
+    palabra.style.transform = "translate(0, 0) rotate(0deg)";
+    palabra.style.transition = "transform 1.5s ease-out, opacity 1.5s ease-out";
+
+    document.body.appendChild(palabra);
+
+    // Forzar reflow para que la transición funcione
+    void palabra.offsetWidth;
 
     const dx = (Math.random() - 0.5) * 300;
     const dy = (Math.random() - 0.5) * 300;
     const rot = Math.random() * 720;
 
-    palabra.style.transform = `translate(0, 0) rotate(0deg)`;
-    palabra.style.opacity = 1;
-
-    document.body.appendChild(palabra);
-
-    void palabra.offsetWidth;
-
-    palabra.style.transition = "transform 1.5s ease-out, opacity 1.5s ease-out";
     palabra.style.transform = `translate(${dx}px, ${dy}px) rotate(${rot}deg)`;
-    palabra.style.opacity = 0;
+    palabra.style.opacity = "0";
 
     setTimeout(() => palabra.remove(), 1600);
   }
