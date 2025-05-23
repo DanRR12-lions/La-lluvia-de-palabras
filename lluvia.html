@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Lluvia de Te Amo</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #000;
+      color: white;
+      font-family: sans-serif;
+      position: relative;
+    }
+    .word {
+      position: absolute;
+      color: #ff69b4;
+      font-size: 24px;
+      animation: fall linear;
+    }
+    @keyframes fall {
+      0% { top: -30px; opacity: 1; }
+      100% { top: 100%; opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<script>
+function crearPalabra() {
+  const palabra = document.createElement("div");
+  palabra.textContent = "te amo";
+  palabra.className = "word";
+  palabra.style.left = Math.random() * window.innerWidth + "px";
+  palabra.style.animationDuration = (2 + Math.random() * 3) + "s";
+  document.body.appendChild(palabra);
+  setTimeout(() => palabra.remove(), 5000);
+}
+
+setInterval(crearPalabra, 200);
+
+// Explosión de palabras al tocar
+document.addEventListener("click", e => {
+  for (let i = 0; i < 20; i++) {
+    const palabra = document.createElement("div");
+    palabra.textContent = "te amo";
+    palabra.className = "word";
+    palabra.style.left = e.clientX + "px";
+    palabra.style.top = e.clientY + "px";
+    palabra.style.animation = "fall 1s ease-out";
+    palabra.style.transform = translate(${(Math.random()-0.5)*200}px, ${(Math.random()-0.5)*200}px) rotate(${Math.random()*360}deg);
+    palabra.style.position = "absolute";
+    document.body.appendChild(palabra);
+    setTimeout(() => palabra.remove(), 1000);
+  }
+});
+</script>
+
+</body>
+</html>
