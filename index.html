@@ -2,17 +2,25 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Lluvia y Explosión de Te Quiero</title>
+  <title>Para Dannai</title>
+
+  <!-- Vista previa para WhatsApp / redes sociales -->
+  <meta property="og:title" content="Para Dannai" />
+  <meta property="og:description" content="Una lluvia infinita de te quiero con explosiones hermosas 💖" />
+  <meta property="og:image" content="https://via.placeholder.com/600x300/ff69b4/ffffff?text=Para+Dannai" />
+  <meta property="og:url" content="https://tu-usuario.github.io/tu-repo/" />
+  <meta property="og:type" content="website" />
+
   <style>
     body {
       margin: 0;
       overflow: hidden;
       background: #000;
-      color: white;
       font-family: sans-serif;
       position: relative;
       height: 100vh;
     }
+
     .word {
       position: absolute;
       color: #ff69b4;
@@ -28,6 +36,7 @@
       animation-timing-function: linear;
       animation-fill-mode: forwards;
     }
+
     @keyframes fall {
       0% { top: -30px; opacity: 1; }
       100% { top: 100vh; opacity: 0; }
@@ -37,7 +46,7 @@
 <body>
 
 <script>
-  // Función para crear palabra que cae
+  // Lluvia constante
   function crearPalabra() {
     const palabra = document.createElement("div");
     palabra.textContent = "te quiero";
@@ -49,27 +58,24 @@
     setTimeout(() => palabra.remove(), 6000);
   }
 
-  // Intervalo para lluvia constante
-  setInterval(crearPalabra, 80); // Más cantidad que antes
+  setInterval(crearPalabra, 80);
 
-  // Explosión al hacer click
+  // Explosión con clic
   document.addEventListener("click", e => {
     for (let i = 0; i < 20; i++) {
       const palabra = document.createElement("div");
       palabra.textContent = "te quiero";
       palabra.className = "word";
-      palabra.style.position = "absolute";
       palabra.style.left = e.clientX + "px";
       palabra.style.top = e.clientY + "px";
+      palabra.style.animation = "none";
       palabra.style.opacity = "1";
       palabra.style.transform = "translate(0, 0) rotate(0deg)";
-      palabra.style.animation = "none";
       palabra.style.transition = "transform 1.5s ease-out, opacity 1.5s ease-out";
 
       document.body.appendChild(palabra);
 
-      // Forzar reflow para que transición funcione
-      void palabra.offsetWidth;
+      void palabra.offsetWidth; // Forzar reflow
 
       const dx = (Math.random() - 0.5) * 300;
       const dy = (Math.random() - 0.5) * 300;
