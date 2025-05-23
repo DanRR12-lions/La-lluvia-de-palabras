@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Lluvia de Te Quiero</title>
+  <title>Lluvia y Explosión de Te Quiero</title>
   <style>
     body {
       margin: 0;
@@ -17,16 +17,16 @@
       position: absolute;
       color: #ff69b4;
       font-size: 24px;
-      animation-name: fall;
-      animation-timing-function: linear;
-      animation-fill-mode: forwards;
-      /* Estela: sombra rosa */
+      pointer-events: none;
+      user-select: none;
       text-shadow:
         0 0 5px #ff69b4,
         0 0 10px #ff69b4,
         0 0 15px #ff69b4,
         0 0 20px #ff1493;
-      pointer-events: none; /* para que no bloqueen clicks */
+      animation-name: fall;
+      animation-timing-function: linear;
+      animation-fill-mode: forwards;
     }
     @keyframes fall {
       0% { top: -30px; opacity: 1; }
@@ -37,47 +37,50 @@
 <body>
 
 <script>
-function crearPalabra() {
-  const palabra = document.createElement("div");
-  palabra.textContent = "te quiero";
-  palabra.className = "word";
-  palabra.style.left = Math.random() * window.innerWidth + "px";
-  palabra.style.top = "-30px"; // posición inicial arriba
-  palabra.style.animationDuration = (3 + Math.random() * 3) + "s"; // duración 3-6 seg
-  document.body.appendChild(palabra);
-  setTimeout(() => palabra.remove(), 6000);
-}
-
-// Más palabras por segundo (100ms en vez de 200ms)
-setInterval(crearPalabra, 100);
-
-document.addEventListener("click", e => {
-  for (let i = 0; i < 20; i++) {
+  // Función para crear palabra que cae
+  function crearPalabra() {
     const palabra = document.createElement("div");
     palabra.textContent = "te quiero";
     palabra.className = "word";
-    palabra.style.position = "absolute";
-    palabra.style.left = e.clientX + "px";
-    palabra.style.top = e.clientY + "px";
-    palabra.style.opacity = "1";
-    palabra.style.transform = "translate(0, 0) rotate(0deg)";
-    palabra.style.transition = "transform 1.5s ease-out, opacity 1.5s ease-out";
-
+    palabra.style.left = Math.random() * window.innerWidth + "px";
+    palabra.style.top = "-30px";
+    palabra.style.animationDuration = (3 + Math.random() * 3) + "s";
     document.body.appendChild(palabra);
-
-    // Forzar reflow para que la transición funcione
-    void palabra.offsetWidth;
-
-    const dx = (Math.random() - 0.5) * 300;
-    const dy = (Math.random() - 0.5) * 300;
-    const rot = Math.random() * 720;
-
-    palabra.style.transform = `translate(${dx}px, ${dy}px) rotate(${rot}deg)`;
-    palabra.style.opacity = "0";
-
-    setTimeout(() => palabra.remove(), 1600);
+    setTimeout(() => palabra.remove(), 6000);
   }
-});
+
+  // Intervalo para lluvia constante
+  setInterval(crearPalabra, 80); // Más cantidad que antes
+
+  // Explosión al hacer click
+  document.addEventListener("click", e => {
+    for (let i = 0; i < 20; i++) {
+      const palabra = document.createElement("div");
+      palabra.textContent = "te quiero";
+      palabra.className = "word";
+      palabra.style.position = "absolute";
+      palabra.style.left = e.clientX + "px";
+      palabra.style.top = e.clientY + "px";
+      palabra.style.opacity = "1";
+      palabra.style.transform = "translate(0, 0) rotate(0deg)";
+      palabra.style.animation = "none";
+      palabra.style.transition = "transform 1.5s ease-out, opacity 1.5s ease-out";
+
+      document.body.appendChild(palabra);
+
+      // Forzar reflow para que transición funcione
+      void palabra.offsetWidth;
+
+      const dx = (Math.random() - 0.5) * 300;
+      const dy = (Math.random() - 0.5) * 300;
+      const rot = Math.random() * 720;
+
+      palabra.style.transform = `translate(${dx}px, ${dy}px) rotate(${rot}deg)`;
+      palabra.style.opacity = "0";
+
+      setTimeout(() => palabra.remove(), 1600);
+    }
+  });
 </script>
 
 </body>
