@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Lluvia de Te Amo</title>
   <style>
     body {
@@ -11,16 +11,19 @@
       color: white;
       font-family: sans-serif;
       position: relative;
+      height: 100vh;
     }
     .word {
       position: absolute;
       color: #ff69b4;
       font-size: 24px;
-      animation: fall linear;
+      animation-name: fall;
+      animation-timing-function: linear;
+      animation-fill-mode: forwards;
     }
     @keyframes fall {
       0% { top: -30px; opacity: 1; }
-      100% { top: 100%; opacity: 0; }
+      100% { top: 100vh; opacity: 0; }
     }
   </style>
 </head>
@@ -32,9 +35,10 @@ function crearPalabra() {
   palabra.textContent = "te amo";
   palabra.className = "word";
   palabra.style.left = Math.random() * window.innerWidth + "px";
-  palabra.style.animationDuration = (2 + Math.random() * 3) + "s";
+  palabra.style.top = "-30px"; // posición inicial arriba
+  palabra.style.animationDuration = (3 + Math.random() * 3) + "s"; // duración 3-6 seg
   document.body.appendChild(palabra);
-  setTimeout(() => palabra.remove(), 5000);
+  setTimeout(() => palabra.remove(), 6000);
 }
 
 setInterval(crearPalabra, 200);
@@ -46,10 +50,25 @@ document.addEventListener("click", e => {
     palabra.className = "word";
     palabra.style.left = e.clientX + "px";
     palabra.style.top = e.clientY + "px";
-    palabra.style.animation = "fall 1s ease-out";
-    palabra.style.transform = translate(${(Math.random()-0.5)*200}px, ${(Math.random()-0.5)*200}px) rotate(${Math.random()*360}deg);
+    palabra.style.animation = "explode 1s ease-out forwards";
     palabra.style.position = "absolute";
+    
+    // Para animar explosión con transform, creamos animación CSS dinámica
+    const dx = (Math.random() - 0.5) * 200;
+    const dy = (Math.random() - 0.5) * 200;
+    const rot = Math.random() * 360;
+
+    palabra.style.transform = translate(0, 0) rotate(0deg);
+    
+    // Forzar reflow para reiniciar la animación
+    void palabra.offsetWidth;
+
+    palabra.style.transition = "transform 1s ease-out, opacity 1s ease-out";
+    palabra.style.transform = translate(${dx}px, ${dy}px) rotate(${rot}deg);
+    palabra.style.opacity = 0;
+
     document.body.appendChild(palabra);
+
     setTimeout(() => palabra.remove(), 1000);
   }
 });
