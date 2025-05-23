@@ -6,7 +6,7 @@
 
   <!-- Vista previa para WhatsApp / redes sociales -->
   <meta property="og:title" content="Para Dannai" />
-  <meta property="og:description" content="Una lluvia infinita de te quiero con explosiones hermosas 💖" />
+  <meta property="og:description" content="Una lluvia infinita de amor 💖" />
   <meta property="og:image" content="https://via.placeholder.com/600x300/ff69b4/ffffff?text=Para+Dannai" />
   <meta property="og:url" content="https://tu-usuario.github.io/tu-repo/" />
   <meta property="og:type" content="website" />
@@ -46,10 +46,12 @@
 <body>
 
 <script>
+  const palabras = ["te quiero", "me gustas", "me encantas", "te adoro"];
+
   // Lluvia constante
   function crearPalabra() {
     const palabra = document.createElement("div");
-    palabra.textContent = "te quiero";
+    palabra.textContent = palabras[Math.floor(Math.random() * palabras.length)];
     palabra.className = "word";
     palabra.style.left = Math.random() * window.innerWidth + "px";
     palabra.style.top = "-30px";
@@ -64,7 +66,7 @@
   document.addEventListener("click", e => {
     for (let i = 0; i < 20; i++) {
       const palabra = document.createElement("div");
-      palabra.textContent = "te quiero";
+      palabra.textContent = palabras[Math.floor(Math.random() * palabras.length)];
       palabra.className = "word";
       palabra.style.left = e.clientX + "px";
       palabra.style.top = e.clientY + "px";
