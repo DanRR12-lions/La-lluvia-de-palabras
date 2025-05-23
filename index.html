@@ -6,7 +6,7 @@
 
   <!-- Vista previa para WhatsApp / redes sociales -->
   <meta property="og:title" content="Para Dannai" />
-  <meta property="og:description" content="Una lluvia infinita de amor 💖" />
+  <meta property="og:description" content="Una lluvia infinita 💖" />
   <meta property="og:image" content="https://via.placeholder.com/600x300/ff69b4/ffffff?text=Para+Dannai" />
   <meta property="og:url" content="https://tu-usuario.github.io/tu-repo/" />
   <meta property="og:type" content="website" />
@@ -62,7 +62,7 @@
 
   setInterval(crearPalabra, 80);
 
-  // Explosión con clic
+  // Explosión con clic (duración 3 segundos)
   document.addEventListener("click", e => {
     for (let i = 0; i < 20; i++) {
       const palabra = document.createElement("div");
@@ -73,7 +73,7 @@
       palabra.style.animation = "none";
       palabra.style.opacity = "1";
       palabra.style.transform = "translate(0, 0) rotate(0deg)";
-      palabra.style.transition = "transform 1.5s ease-out, opacity 1.5s ease-out";
+      palabra.style.transition = "transform 3s ease-out, opacity 3s ease-out";
 
       document.body.appendChild(palabra);
 
@@ -86,7 +86,7 @@
       palabra.style.transform = `translate(${dx}px, ${dy}px) rotate(${rot}deg)`;
       palabra.style.opacity = "0";
 
-      setTimeout(() => palabra.remove(), 1600);
+      setTimeout(() => palabra.remove(), 3000);
     }
   });
 </script>
