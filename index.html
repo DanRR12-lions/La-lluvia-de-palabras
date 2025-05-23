@@ -50,21 +50,19 @@ document.addEventListener("click", e => {
     palabra.className = "word";
     palabra.style.left = e.clientX + "px";
     palabra.style.top = e.clientY + "px";
-    palabra.style.animation = "explode 1s ease-out forwards";
     palabra.style.position = "absolute";
-    
-    // Para animar explosión con transform, creamos animación CSS dinámica
+
     const dx = (Math.random() - 0.5) * 200;
     const dy = (Math.random() - 0.5) * 200;
     const rot = Math.random() * 360;
 
-    palabra.style.transform = translate(0, 0) rotate(0deg);
-    
+    palabra.style.transform = `translate(0, 0) rotate(0deg)`;
+
     // Forzar reflow para reiniciar la animación
     void palabra.offsetWidth;
 
     palabra.style.transition = "transform 1s ease-out, opacity 1s ease-out";
-    palabra.style.transform = translate(${dx}px, ${dy}px) rotate(${rot}deg);
+    palabra.style.transform = `translate(${dx}px, ${dy}px) rotate(${rot}deg)`;
     palabra.style.opacity = 0;
 
     document.body.appendChild(palabra);
