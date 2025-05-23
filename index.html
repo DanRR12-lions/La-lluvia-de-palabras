@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Lluvia de Te Amo</title>
+  <title>Lluvia de Te Quiero</title>
   <style>
     body {
       margin: 0;
@@ -20,6 +20,13 @@
       animation-name: fall;
       animation-timing-function: linear;
       animation-fill-mode: forwards;
+      /* Estela: sombra rosa */
+      text-shadow:
+        0 0 5px #ff69b4,
+        0 0 10px #ff69b4,
+        0 0 15px #ff69b4,
+        0 0 20px #ff1493;
+      pointer-events: none; /* para que no bloqueen clicks */
     }
     @keyframes fall {
       0% { top: -30px; opacity: 1; }
@@ -32,7 +39,7 @@
 <script>
 function crearPalabra() {
   const palabra = document.createElement("div");
-  palabra.textContent = "te amo";
+  palabra.textContent = "te quiero";
   palabra.className = "word";
   palabra.style.left = Math.random() * window.innerWidth + "px";
   palabra.style.top = "-30px"; // posición inicial arriba
@@ -41,33 +48,34 @@ function crearPalabra() {
   setTimeout(() => palabra.remove(), 6000);
 }
 
-setInterval(crearPalabra, 200);
+// Más palabras por segundo (100ms en vez de 200ms)
+setInterval(crearPalabra, 100);
 
 document.addEventListener("click", e => {
   for (let i = 0; i < 20; i++) {
     const palabra = document.createElement("div");
-    palabra.textContent = "te amo";
+    palabra.textContent = "te quiero";
     palabra.className = "word";
     palabra.style.left = e.clientX + "px";
     palabra.style.top = e.clientY + "px";
     palabra.style.position = "absolute";
 
-    const dx = (Math.random() - 0.5) * 200;
-    const dy = (Math.random() - 0.5) * 200;
-    const rot = Math.random() * 360;
+    const dx = (Math.random() - 0.5) * 300;
+    const dy = (Math.random() - 0.5) * 300;
+    const rot = Math.random() * 720;
 
     palabra.style.transform = `translate(0, 0) rotate(0deg)`;
-
-    // Forzar reflow para reiniciar la animación
-    void palabra.offsetWidth;
-
-    palabra.style.transition = "transform 1s ease-out, opacity 1s ease-out";
-    palabra.style.transform = `translate(${dx}px, ${dy}px) rotate(${rot}deg)`;
-    palabra.style.opacity = 0;
+    palabra.style.opacity = 1;
 
     document.body.appendChild(palabra);
 
-    setTimeout(() => palabra.remove(), 1000);
+    void palabra.offsetWidth;
+
+    palabra.style.transition = "transform 1.5s ease-out, opacity 1.5s ease-out";
+    palabra.style.transform = `translate(${dx}px, ${dy}px) rotate(${rot}deg)`;
+    palabra.style.opacity = 0;
+
+    setTimeout(() => palabra.remove(), 1600);
   }
 });
 </script>
