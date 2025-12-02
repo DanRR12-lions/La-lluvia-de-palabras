@@ -28,7 +28,6 @@
       position: relative;
     }
 
-    /* Título */
     h1 {
       position: absolute;
       top: 18px;
@@ -41,7 +40,6 @@
       text-shadow: 0 2px 10px rgba(0,0,0,.6);
     }
 
-    /* Estilo para las palabras (lluvia y explosión) */
     .word {
       position: absolute;
       pointer-events: none;
@@ -63,7 +61,6 @@
       to   { transform: translateY(120vh); opacity: 0; }
     }
 
-    /* Mensaje de error (si la imagen no se encuentra) */
     #errorBanner {
       position: fixed;
       left: 10px;
@@ -76,10 +73,8 @@
       border-radius: 8px;
       display: none;
       z-index: 60;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
     }
 
-    /* Mensaje de ayuda */
     #helpTip {
       position: fixed;
       left: 50%;
@@ -99,109 +94,86 @@
 
   <h1>Fer, esto es para ti 💛</h1>
 
-  <div id="errorBanner">Imagen de preview NO encontrada: verifica que <code>fer-preview.jpg</code> esté en la raíz del repo.</div>
+  <div id="errorBanner">Imagen de preview NO encontrada.</div>
   <div id="helpTip">Toca o haz clic en la pantalla para una explosión de palabras ✨</div>
 
-  <script>
-    /***** Lista de palabras personalizadas *****/
-    const palabras = [
-      "te quiero Fer", "me gustas Fer", "me encantas Fer", "tu risa",
-      "eres especial", "me haces feliz", "tu vibra", "eres increíble",
-      "siempre tú", "tu sonrisa", "💖", "✨"
-    ];
+<script>
+  const palabras = [
+    "te quiero Fer", "me gustas Fer", "me encantas Fer", "tu risa",
+    "eres especial", "me haces feliz", "tu vibra", "eres increíble",
+    "siempre tú", "tu sonrisa", "💖", "✨"
+  ];
 
-    /***** LLUVIA automática (crea palabras desde arriba) *****/
-    function crearPalabraAleatoria() {
-      const x = Math.random() * window.innerWidth;
-      crearPalabraEn(x, -60, true);
-    }
-    const lluviaInterval = setInterval(crearPalabraAleatoria, 220); // frecuencia lluvia
+  function crearPalabraAleatoria() {
+    const x = Math.random() * window.innerWidth;
+    crearPalabraEn(x, -60, true);
+  }
+  setInterval(crearPalabraAleatoria, 220);
 
-    /***** Crear palabra en coordenadas (x,y)
-           si isFalling=true usará la animación 'fall', si false usará transición manual para explosión */
-    function crearPalabraEn(x, y, isFalling = true, duration = null) {
-      const el = document.createElement('div');
-      el.className = 'word';
-      el.textContent = palabras[Math.floor(Math.random() * palabras.length)];
+  function crearPalabraEn(x, y, isFalling = true, duration = null) {
+    const el = document.createElement('div');
+    el.className = 'word';
+    el.textContent = palabras[Math.floor(Math.random() * palabras.length)];
+    el.style.left = x + 'px';
+    el.style.top = y + 'px';
 
-      el.style.left = (x) + 'px';
-      el.style.top = (y) + 'px';
-
-      if (isFalling) {
-        // Duración aleatoria para la caída
-        const t = (2.2 + Math.random() * 2.8).toFixed(2) + 's';
-        el.style.animationDuration = t;
-      } else {
-        // Para explosión: no usar animación 'fall', mover con transform + transition
-        el.style.animation = 'none';
-        el.style.opacity = '1';
-        el.style.transform = 'translate(0,0) rotate(0deg)';
-        el.style.transition = transform ${duration || 2.6}s cubic-bezier(.2,.9,.2,1), opacity ${duration || 2.6}s ease;
-      }
-
-      document.body.appendChild(el);
-
-      // Si es explosión, empujar a una dirección aleatoria
-      if (!isFalling) {
-        // Small delay to ensure styles applied
-        requestAnimationFrame(() => {
-          const dx = (Math.random() - 0.5) * 360;
-          const dy = (Math.random() - 0.5) * 360;
-          const rot = (Math.random() * 720) * (Math.random() < 0.5 ? -1 : 1);
-          el.style.transform = translate(${dx}px, ${dy}px) rotate(${rot}deg);
-          el.style.opacity = '0';
-        });
-        // borrar después
-        setTimeout(() => el.remove(), 3200);
-      } else {
-        // borrar después de la animación de caída (un poco más del max)
-        setTimeout(() => {
-          if (el && el.remove) el.remove();
-        }, 6000);
-      }
+    if (isFalling) {
+      const t = (2.2 + Math.random() * 2.8).toFixed(2) + 's';
+      el.style.animationDuration = t;
+    } else {
+      el.style.animation = 'none';
+      el.style.opacity = '1';
+      el.style.transform = 'translate(0,0) rotate(0deg)';
+      el.style.transition =
+        `transform ${duration || 2.6}s cubic-bezier(.2,.9,.2,1),
+         opacity ${duration || 2.6}s ease`;
     }
 
-    /***** EXPLOSIÓN donde el usuario toca / clickea *****/
-    function explosionEn(x, y, cantidad = 18) {
-      for (let i = 0; i < cantidad; i++) {
-        const jitterX = (Math.random() - 0.5) * 24;
-        const jitterY = (Math.random() - 0.5) * 24;
-        crearPalabraEn(x + jitterX, y + jitterY, false, 2.6 + Math.random() * 0.8);
-      }
+    document.body.appendChild(el);
+
+    if (!isFalling) {
+      requestAnimationFrame(() => {
+        const dx = (Math.random() - 0.5) * 360;
+        const dy = (Math.random() - 0.5) * 360;
+        const rot = (Math.random() * 720) * (Math.random() < 0.5 ? -1 : 1);
+        el.style.transform = translate(${dx}px, ${dy}px) rotate(${rot}deg);
+        el.style.opacity = '0';
+      });
+      setTimeout(() => el.remove(), 3200);
+    } else {
+      setTimeout(() => el.remove(), 6000);
     }
+  }
 
-    // Soporta toque en móviles
-    document.addEventListener('touchstart', function(ev) {
-      const t = ev.touches[0];
-      explosionEn(t.clientX, t.clientY, 22);
-    }, {passive: true});
+  function explosionEn(x, y, cantidad = 18) {
+    for (let i = 0; i < cantidad; i++) {
+      const jitterX = (Math.random() - 0.5) * 24;
+      const jitterY = (Math.random() - 0.5) * 24;
+      crearPalabraEn(x + jitterX, y + jitterY, false, 2.6 + Math.random() * 0.8);
+    }
+  }
 
-    // Clic en PC
-    document.addEventListener('click', function(ev) {
-      explosionEn(ev.clientX, ev.clientY, 20);
-    });
+  document.addEventListener('touchstart', ev => {
+    const t = ev.touches[0];
+    explosionEn(t.clientX, t.clientY, 22);
+  }, {passive: true});
 
-    /***** --- Comprobación de existencia de la imagen fer-preview.jpg --- *****/
-    (function comprobarImagen() {
-      const imgUrl = 'https://danrr12-lions.github.io/La-lluvia-de-palabras/fer-preview.jpg';
-      // Intentamos hacer fetch HEAD para ver si responde OK (usamos GET por compatibilidad)
-      fetch(imgUrl, { method: 'GET', cache: 'no-store' })
-        .then(resp => {
-          if (!resp.ok) {
-            // Mostrar banner de error
-            document.getElementById('errorBanner').style.display = 'block';
-            console.warn('fer-preview.jpg no encontrada en:', imgUrl, 'Status:', resp.status);
-          } else {
-            // Si existe, ocultar banner (por si quedó visible)
-            document.getElementById('errorBanner').style.display = 'none';
-            console.log('Imagen de preview encontrada ->', imgUrl);
-          }
-        })
-        .catch(err => {
-          document.getElementById('errorBanner').style.display = 'block';
-          console.error('Error comprobando la imagen:', err);
-        });
-    })();
-  </script>
+  document.addEventListener('click', ev => {
+    explosionEn(ev.clientX, ev.clientY, 20);
+  });
+
+  (function comprobarImagen() {
+    const imgUrl = 'https://danrr12-lions.github.io/La-lluvia-de-palabras/fer-preview.jpg';
+    fetch(imgUrl, { method: 'GET', cache: 'no-store' })
+      .then(resp => {
+        document.getElementById('errorBanner').style.display =
+          resp.ok ? 'none' : 'block';
+      })
+      .catch(() => {
+        document.getElementById('errorBanner').style.display = 'block';
+      });
+  })();
+</script>
+
 </body>
 </html>
