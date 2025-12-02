@@ -1,109 +1,88 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para Fer 💛</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- PREVIEW PARA WHATSAPP / FACEBOOK / X -->
+    <meta property="og:title" content="Para Fer ❤">
+    <meta property="og:description" content="Tengo algo para ti :)">
+    <meta property="og:image" content="https://danrr12-lions.github.io/La-lluvia-de-palabras/fer-preview.jpg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <title>Para Fer ❤</title>
 
     <style>
         body {
             margin: 0;
             padding: 0;
-            background: #fff7e6;
+            background: black;
             overflow: hidden;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Arial', sans-serif;
         }
 
-        /* Imagen de portada */
-        .portada {
+        h1 {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 70%;
-            max-width: 420px;
-            opacity: 1;
-            transition: opacity 1.8s ease;
+            top: 40px;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-size: 32px;
+            z-index: 10;
         }
 
-        /* Texto "Haz click" */
-        .mensaje-click {
-            position: absolute;
-            top: calc(50% + 200px);
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 20px;
-            color: #444;
-            opacity: 1;
-            transition: opacity 1s ease;
-        }
-
-        /* Palabras que explotan */
         .word {
             position: absolute;
-            font-size: 24px;
-            font-weight: bold;
-            color: #ffbc00;
-            pointer-events: none;
+            color: #ff8fb1;
+            font-size: 20px;
             white-space: nowrap;
-            user-select: none;
+            font-weight: bold;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            from {
+                transform: translateY(-10vh);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(110vh);
+                opacity: 0;
+            }
         }
     </style>
 </head>
+
 <body>
 
-    <!-- portada que subiste -->
-    <img src="fer-preview.png" class="portada" id="portada">
+<h1>Fer, esto es para ti ❤</h1>
 
-    <div class="mensaje-click" id="clickMsg">Haz click 💛</div>
+<script>
+// Palabras que van a caer
+const words = [
+    "bonita", "preciosa", "me encantas", "tu risa", "tu forma de ser ❤",
+    "me gustas", "eres especial", "tus ojitos", "tu voz", "Fer",
+    "eres increíble", "me haces feliz", "💗", "✨", "😊", "💕"
+];
 
-    <script>
-        const palabras = [
-            "Fer", "Eres increíble", "Gracias por todo", "Te quiero mucho",
-            "Eres especial", "Me haces feliz", "Sonríe", "Eres luz",
-            "Siempre tú", "Tu risa", "Tu vibra", "Tu energía"
-        ];
+function createWord() {
+    const word = document.createElement("div");
+    word.classList.add("word");
+    word.innerText = words[Math.floor(Math.random() * words.length)];
 
-        const portada = document.getElementById("portada");
-        const clickMsg = document.getElementById("clickMsg");
+    word.style.left = Math.random() * 100 + "vw";
+    word.style.animationDuration = (2 + Math.random() * 3) + "s";
 
-        let primeraVez = true;
+    document.body.appendChild(word);
 
-        // Ocultar portada al primer click
-        document.addEventListener("click", () => {
+    setTimeout(() => word.remove(), 5000);
+}
 
-            if (primeraVez) {
-                portada.style.opacity = "0";
-                clickMsg.style.opacity = "0";
-                primeraVez = false;
-            }
-
-            // Explosión de palabras
-            for (let a = 0; a < 15; a++) {
-                const palabra = document.createElement("div");
-                palabra.textContent = palabras[Math.floor(Math.random() * palabras.length)];
-                palabra.className = "word";
-
-                palabra.style.left = event.clientX + "px";
-                palabra.style.top = event.clientY + "px";
-                palabra.style.opacity = "1";
-
-                document.body.appendChild(palabra);
-
-                void palabra.offsetWidth;
-
-                const dx = (Math.random() - 0.5) * 350;
-                const dy = (Math.random() - 0.5) * 350;
-                const rot = Math.random() * 720;
-
-                palabra.style.transition = "transform 2.8s ease-out, opacity 3s ease-out";
-                palabra.style.transform = translate(${dx}px, ${dy}px) rotate(${rot}deg);
-                palabra.style.opacity = "0";
-
-                setTimeout(() => palabra.remove(), 3000);
-            }
-        });
-    </script>
+setInterval(createWord, 300);
+</script>
 
 </body>
 </html>
