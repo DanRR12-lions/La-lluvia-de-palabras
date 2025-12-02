@@ -1,100 +1,109 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Para Fer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Fer 💛</title>
 
-  <!-- Vista previa para WhatsApp / redes sociales -->
-  <meta property="og:title" content="Para Fer" />
-  <meta property="og:description" content="Una lluvia infinita de amor 💖" />
-  <meta property="og:image" content="https://via.placeholder.com/600x300/ff69b4/ffffff?text=Para+Fer" />
-  <meta property="og:url" content="https://tu-usuario.github.io/tu-repo/" />
-  <meta property="og:type" content="website" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #fff7e6;
+            overflow: hidden;
+            font-family: 'Segoe UI', sans-serif;
+        }
 
-  <style>
-    body {
-      margin: 0;
-      overflow: hidden;
-      background: #000;
-      font-family: sans-serif;
-      position: relative;
-      height: 100vh;
-    }
+        /* Imagen de portada */
+        .portada {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70%;
+            max-width: 420px;
+            opacity: 1;
+            transition: opacity 1.8s ease;
+        }
 
-    .word {
-      position: absolute;
-      color: #ff69b4;
-      font-size: 24px;
-      pointer-events: none;
-      user-select: none;
-      text-shadow:
-        0 0 5px #ff69b4,
-        0 0 10px #ff69b4,
-        0 0 15px #ff69b4,
-        0 0 20px #ff1493;
-      animation-name: fall;
-      animation-timing-function: linear;
-      animation-fill-mode: forwards;
-    }
+        /* Texto "Haz click" */
+        .mensaje-click {
+            position: absolute;
+            top: calc(50% + 200px);
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 20px;
+            color: #444;
+            opacity: 1;
+            transition: opacity 1s ease;
+        }
 
-    @keyframes fall {
-      0% { top: -30px; opacity: 1; }
-      100% { top: 100vh; opacity: 0; }
-    }
-  </style>
+        /* Palabras que explotan */
+        .word {
+            position: absolute;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffbc00;
+            pointer-events: none;
+            white-space: nowrap;
+            user-select: none;
+        }
+    </style>
 </head>
 <body>
 
-<script>
-  // Palabras personalizadas para Fer
-  const palabras = [
-    "te quiero Fer",
-    "me gustas Fer",
-    "me encantas Fer"
-  ];
+    <!-- portada que subiste -->
+    <img src="fer-preview.png" class="portada" id="portada">
 
-  // Lluvia constante
-  function crearPalabra() {
-    const palabra = document.createElement("div");
-    palabra.textContent = palabras[Math.floor(Math.random() * palabras.length)];
-    palabra.className = "word";
-    palabra.style.left = Math.random() * window.innerWidth + "px";
-    palabra.style.top = "-30px";
-    palabra.style.animationDuration = (3 + Math.random() * 3) + "s";
-    document.body.appendChild(palabra);
-    setTimeout(() => palabra.remove(), 6000);
-  }
+    <div class="mensaje-click" id="clickMsg">Haz click 💛</div>
 
-  setInterval(crearPalabra, 80);
+    <script>
+        const palabras = [
+            "Fer", "Eres increíble", "Gracias por todo", "Te quiero mucho",
+            "Eres especial", "Me haces feliz", "Sonríe", "Eres luz",
+            "Siempre tú", "Tu risa", "Tu vibra", "Tu energía"
+        ];
 
-  // Explosión con clic (duración 3 segundos)
-  document.addEventListener("click", e => {
-    for (let i = 0; i < 20; i++) {
-      const palabra = document.createElement("div");
-      palabra.textContent = palabras[Math.floor(Math.random() * palabras.length)];
-      palabra.className = "word";
-      palabra.style.left = e.clientX + "px";
-      palabra.style.top = e.clientY + "px";
-      palabra.style.animation = "none";
-      palabra.style.opacity = "1";
-      palabra.style.transform = "translate(0, 0) rotate(0deg)";
-      palabra.style.transition = "transform 3s ease-out, opacity 3s ease-out";
+        const portada = document.getElementById("portada");
+        const clickMsg = document.getElementById("clickMsg");
 
-      document.body.appendChild(palabra);
+        let primeraVez = true;
 
-      void palabra.offsetWidth; // Forzar reflow
+        // Ocultar portada al primer click
+        document.addEventListener("click", () => {
 
-      const dx = (Math.random() - 0.5) * 300;
-      const dy = (Math.random() - 0.5) * 300;
-      const rot = Math.random() * 720;
+            if (primeraVez) {
+                portada.style.opacity = "0";
+                clickMsg.style.opacity = "0";
+                primeraVez = false;
+            }
 
-      palabra.style.transform = translate(${dx}px, ${dy}px) rotate(${rot}deg);
-      palabra.style.opacity = "0";
+            // Explosión de palabras
+            for (let a = 0; a < 15; a++) {
+                const palabra = document.createElement("div");
+                palabra.textContent = palabras[Math.floor(Math.random() * palabras.length)];
+                palabra.className = "word";
 
-      setTimeout(() => palabra.remove(), 3000);
-    }
-  });
-</script>
+                palabra.style.left = event.clientX + "px";
+                palabra.style.top = event.clientY + "px";
+                palabra.style.opacity = "1";
+
+                document.body.appendChild(palabra);
+
+                void palabra.offsetWidth;
+
+                const dx = (Math.random() - 0.5) * 350;
+                const dy = (Math.random() - 0.5) * 350;
+                const rot = Math.random() * 720;
+
+                palabra.style.transition = "transform 2.8s ease-out, opacity 3s ease-out";
+                palabra.style.transform = translate(${dx}px, ${dy}px) rotate(${rot}deg);
+                palabra.style.opacity = "0";
+
+                setTimeout(() => palabra.remove(), 3000);
+            }
+        });
+    </script>
 
 </body>
 </html>
