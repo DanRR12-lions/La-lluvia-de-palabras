@@ -1,93 +1,207 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lluvia de Palabras</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Para Fer ❤</title>
 
-    <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            overflow: hidden;
-            background: linear-gradient(to bottom, #87CEEB, #1E90FF);
-            font-family: Arial, sans-serif;
-        }
+  <!-- OPEN GRAPH / PREVIEW -->
+  <meta property="og:title" content="Para Fer ❤">
+  <meta property="og:description" content="Una lluvia infinita de palabras para ti.">
+  <meta property="og:image" content="https://danrr12-lions.github.io/La-lluvia-de-palabras/fer-preview.jpg">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://danrr12-lions.github.io/La-lluvia-de-palabras/">
+  <meta name="twitter:card" content="summary_large_image">
 
-        h1 {
-            text-align: center;
-            color: white;
-            margin-top: 20px;
-            font-size: 2.5rem;
-            text-shadow: 2px 2px 5px #0008;
-        }
+  <style>
+    :root {
+      --bg1: #000000;
+      --accent: #ff69b4;
+      --text: #fff;
+    }
+    html,body { height:100%; margin:0; }
+    body {
+      background: var(--bg1);
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+      overflow: hidden;
+      position: relative;
+    }
 
-        .palabra {
-            position: absolute;
-            color: white;
-            font-size: 1.5rem;
-            font-weight: bold;
-            text-shadow: 2px 2px 5px #0008;
-            animation: caer linear forwards;
-        }
+    /* Título */
+    h1 {
+      position: absolute;
+      top: 18px;
+      width: 100%;
+      text-align: center;
+      font-size: 28px;
+      margin: 0;
+      z-index: 30;
+      color: var(--text);
+      text-shadow: 0 2px 10px rgba(0,0,0,.6);
+    }
 
-        @keyframes caer {
-            from { transform: translateY(0); opacity: 1; }
-            to   { transform: translateY(110vh); opacity: 0; }
-        }
-    </style>
+    /* Estilo para las palabras (lluvia y explosión) */
+    .word {
+      position: absolute;
+      pointer-events: none;
+      user-select: none;
+      color: var(--accent);
+      font-weight: 700;
+      text-shadow:
+        0 0 6px rgba(255,105,180,0.6),
+        0 0 12px rgba(255,20,147,0.25);
+      font-size: 20px;
+      white-space: nowrap;
+      will-change: transform, opacity;
+      z-index: 20;
+      animation: fall linear forwards;
+    }
+
+    @keyframes fall {
+      from { transform: translateY(-20vh); opacity: 1; }
+      to   { transform: translateY(120vh); opacity: 0; }
+    }
+
+    /* Mensaje de error (si la imagen no se encuentra) */
+    #errorBanner {
+      position: fixed;
+      left: 10px;
+      right: 10px;
+      top: 10px;
+      padding: 10px 14px;
+      background: rgba(255,80,80,0.95);
+      color: white;
+      font-weight: 700;
+      border-radius: 8px;
+      display: none;
+      z-index: 60;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+    }
+
+    /* Mensaje de ayuda */
+    #helpTip {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 16px;
+      background: rgba(0,0,0,0.45);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 14px;
+      z-index: 40;
+      user-select: none;
+    }
+  </style>
 </head>
 <body>
 
-    <h1>Lluvia de Palabras</h1>
+  <h1>Fer, esto es para ti 💛</h1>
 
-    <script>
-        const palabras = [
-            "Creatividad", "Lluvia", "Ideas", "Coding", "Daniel", "GitHub",
-            "Proyecto", "Animación", "Aprender", "Móvil", "Pantalla"
-        ];
+  <div id="errorBanner">Imagen de preview NO encontrada: verifica que <code>fer-preview.jpg</code> esté en la raíz del repo.</div>
+  <div id="helpTip">Toca o haz clic en la pantalla para una explosión de palabras ✨</div>
 
-        // --- Lluvia normal ---
-        function crearPalabra() {
-            crearPalabraEn(Math.random() * window.innerWidth, -50);
-        }
+  <script>
+    /***** Lista de palabras personalizadas *****/
+    const palabras = [
+      "te quiero Fer", "me gustas Fer", "me encantas Fer", "tu risa",
+      "eres especial", "me haces feliz", "tu vibra", "eres increíble",
+      "siempre tú", "tu sonrisa", "💖", "✨"
+    ];
 
-        setInterval(crearPalabra, 700);
+    /***** LLUVIA automática (crea palabras desde arriba) *****/
+    function crearPalabraAleatoria() {
+      const x = Math.random() * window.innerWidth;
+      crearPalabraEn(x, -60, true);
+    }
+    const lluviaInterval = setInterval(crearPalabraAleatoria, 220); // frecuencia lluvia
 
+    /***** Crear palabra en coordenadas (x,y)
+           si isFalling=true usará la animación 'fall', si false usará transición manual para explosión */
+    function crearPalabraEn(x, y, isFalling = true, duration = null) {
+      const el = document.createElement('div');
+      el.className = 'word';
+      el.textContent = palabras[Math.floor(Math.random() * palabras.length)];
 
-        // --- Crear palabra en una coordenada (para lluvia y explosiones) ---
-        function crearPalabraEn(x, y) {
-            const palabra = document.createElement("div");
-            palabra.classList.add("palabra");
-            palabra.textContent = palabras[Math.floor(Math.random() * palabras.length)];
+      el.style.left = (x) + 'px';
+      el.style.top = (y) + 'px';
 
-            palabra.style.left = x + "px";
-            palabra.style.top = y + "px";
-            palabra.style.animationDuration = (Math.random() * 2 + 2) + "s";
+      if (isFalling) {
+        // Duración aleatoria para la caída
+        const t = (2.2 + Math.random() * 2.8).toFixed(2) + 's';
+        el.style.animationDuration = t;
+      } else {
+        // Para explosión: no usar animación 'fall', mover con transform + transition
+        el.style.animation = 'none';
+        el.style.opacity = '1';
+        el.style.transform = 'translate(0,0) rotate(0deg)';
+        el.style.transition = transform ${duration || 2.6}s cubic-bezier(.2,.9,.2,1), opacity ${duration || 2.6}s ease;
+      }
 
-            document.body.appendChild(palabra);
+      document.body.appendChild(el);
 
-            setTimeout(() => palabra.remove(), 4000);
-        }
-
-        // --- EXPLOSIÓN de palabras donde toques ---
-        function explosion(x, y) {
-            for (let i = 0; i < 8; i++) {
-                crearPalabraEn(x + (Math.random() * 80 - 40), y + (Math.random() * 80 - 40));
-            }
-        }
-
-        // Móvil
-        document.addEventListener("touchstart", (e) => {
-            const touch = e.touches[0];
-            explosion(touch.clientX, touch.clientY);
+      // Si es explosión, empujar a una dirección aleatoria
+      if (!isFalling) {
+        // Small delay to ensure styles applied
+        requestAnimationFrame(() => {
+          const dx = (Math.random() - 0.5) * 360;
+          const dy = (Math.random() - 0.5) * 360;
+          const rot = (Math.random() * 720) * (Math.random() < 0.5 ? -1 : 1);
+          el.style.transform = translate(${dx}px, ${dy}px) rotate(${rot}deg);
+          el.style.opacity = '0';
         });
+        // borrar después
+        setTimeout(() => el.remove(), 3200);
+      } else {
+        // borrar después de la animación de caída (un poco más del max)
+        setTimeout(() => {
+          if (el && el.remove) el.remove();
+        }, 6000);
+      }
+    }
 
-        // PC
-        document.addEventListener("click", (e) => {
-            explosion(e.clientX, e.clientY);
+    /***** EXPLOSIÓN donde el usuario toca / clickea *****/
+    function explosionEn(x, y, cantidad = 18) {
+      for (let i = 0; i < cantidad; i++) {
+        const jitterX = (Math.random() - 0.5) * 24;
+        const jitterY = (Math.random() - 0.5) * 24;
+        crearPalabraEn(x + jitterX, y + jitterY, false, 2.6 + Math.random() * 0.8);
+      }
+    }
+
+    // Soporta toque en móviles
+    document.addEventListener('touchstart', function(ev) {
+      const t = ev.touches[0];
+      explosionEn(t.clientX, t.clientY, 22);
+    }, {passive: true});
+
+    // Clic en PC
+    document.addEventListener('click', function(ev) {
+      explosionEn(ev.clientX, ev.clientY, 20);
+    });
+
+    /***** --- Comprobación de existencia de la imagen fer-preview.jpg --- *****/
+    (function comprobarImagen() {
+      const imgUrl = 'https://danrr12-lions.github.io/La-lluvia-de-palabras/fer-preview.jpg';
+      // Intentamos hacer fetch HEAD para ver si responde OK (usamos GET por compatibilidad)
+      fetch(imgUrl, { method: 'GET', cache: 'no-store' })
+        .then(resp => {
+          if (!resp.ok) {
+            // Mostrar banner de error
+            document.getElementById('errorBanner').style.display = 'block';
+            console.warn('fer-preview.jpg no encontrada en:', imgUrl, 'Status:', resp.status);
+          } else {
+            // Si existe, ocultar banner (por si quedó visible)
+            document.getElementById('errorBanner').style.display = 'none';
+            console.log('Imagen de preview encontrada ->', imgUrl);
+          }
+        })
+        .catch(err => {
+          document.getElementById('errorBanner').style.display = 'block';
+          console.error('Error comprobando la imagen:', err);
         });
-    </script>
-
+    })();
+  </script>
 </body>
 </html>
