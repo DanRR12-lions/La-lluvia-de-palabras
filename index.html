@@ -3,126 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Para Fer 💛</title>
-
-    <!-- Vista previa para WhatsApp, Instagram, Messenger -->
-    <meta property="og:title" content="Para Fer 💛">
-    <meta property="og:description" content="Haz click 💛">
-    <meta property="og:image" content="https://danrr12-lions.github.io/La-lluvia-de-palabras/fer-preview.jpg">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://danrr12-lions.github.io/La-lluvia-de-palabras/">
-
-    <!-- Vista previa para iPhone / iMessage -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://danrr12-lions.github.io/La-lluvia-de-palabras/fer-preview.jpg">
-</head>
-    <title>Para Fer ❤</title>
+    <title>Lluvia de Palabras</title>
 
     <style>
         body {
             margin: 0;
-            padding: 0;
-            background: black;
+            height: 100vh;
             overflow: hidden;
-            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom, #87CEEB, #1E90FF);
+            font-family: Arial, sans-serif;
         }
 
         h1 {
-            position: absolute;
-            top: 40px;
-            width: 100%;
             text-align: center;
             color: white;
-            font-size: 32px;
-            z-index: 10;
+            margin-top: 20px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 5px #0008;
         }
 
-        .word {
+        .palabra {
             position: absolute;
-            color: #ff8fb1;
-            font-size: 20px;
-            white-space: nowrap;
+            color: white;
+            font-size: 1.5rem;
             font-weight: bold;
-            animation: fall linear forwards;
+            text-shadow: 2px 2px 5px #0008;
+            animation: caer linear forwards;
         }
 
-        @keyframes fall {
-            from {
-                transform: translateY(-10vh);
-                opacity: 1;
-            }
-            to {
-                transform: translateY(110vh);
-                opacity: 0;
-            }
+        @keyframes caer {
+            from { transform: translateY(0); opacity: 1; }
+            to   { transform: translateY(110vh); opacity: 0; }
         }
     </style>
 </head>
-
 <body>
 
-<h1>Fer, esto es para ti ❤</h1>
+    <h1>Lluvia de Palabras</h1>
 
-<script>
-// Palabras que van a caer
-const words = [
-    "bonita", "preciosa", "me encantas", "tu risa", "tu forma de ser ❤",
-    "me gustas", "eres especial", "todo de ti", "tu voz", "Fer",
-    "eres increíble", "me haces feliz", "💗", "✨", "😊", "💕"
-];
+    <script>
+        const palabras = [
+            "Creatividad", "Lluvia", "Ideas", "Coding", "Daniel", "GitHub",
+            "Proyecto", "Animación", "Aprender", "Móvil", "Pantalla"
+        ];
 
-function createWord() {
-    const word = document.createElement("div");
-    word.classList.add("word");
-    word.innerText = words[Math.floor(Math.random() * words.length)];
+        // --- Lluvia normal ---
+        function crearPalabra() {
+            crearPalabraEn(Math.random() * window.innerWidth, -50);
+        }
 
-    word.style.left = Math.random() * 100 + "vw";
-    word.style.animationDuration = (2 + Math.random() * 3) + "s";
+        setInterval(crearPalabra, 700);
 
-    document.body.appendChild(word);
 
-    setTimeout(() => word.remove(), 5000);
-}
+        // --- Crear palabra en una coordenada (para lluvia y explosiones) ---
+        function crearPalabraEn(x, y) {
+            const palabra = document.createElement("div");
+            palabra.classList.add("palabra");
+            palabra.textContent = palabras[Math.floor(Math.random() * palabras.length)];
 
-setInterval(createWord, 300);
-    // Explosión de palabras al tocar/click
-document.addEventListener("click", e => {
-    for (let i = 0; i < 20; i++) {
-        const palabra = document.createElement("div");
-        palabra.textContent = words[Math.floor(Math.random() * words.length)];
-        palabra.className = "word";
+            palabra.style.left = x + "px";
+            palabra.style.top = y + "px";
+            palabra.style.animationDuration = (Math.random() * 2 + 2) + "s";
 
-        // Punto inicial: donde tocaste
-        palabra.style.left = e.clientX + "px";
-        palabra.style.top = e.clientY + "px";
+            document.body.appendChild(palabra);
 
-        // Sin animación de caída
-        palabra.style.animation = "none";
-        palabra.style.opacity = "1";
-        palabra.style.transform = "translate(0, 0) rotate(0deg)";
-        palabra.style.transition = "transform 3s ease-out, opacity 3s ease-out";
+            setTimeout(() => palabra.remove(), 4000);
+        }
 
-        document.body.appendChild(palabra);
+        // --- EXPLOSIÓN de palabras donde toques ---
+        function explosion(x, y) {
+            for (let i = 0; i < 8; i++) {
+                crearPalabraEn(x + (Math.random() * 80 - 40), y + (Math.random() * 80 - 40));
+            }
+        }
 
-        // Forzar reflow
-        void palabra.offsetWidth;
+        // Móvil
+        document.addEventListener("touchstart", (e) => {
+            const touch = e.touches[0];
+            explosion(touch.clientX, touch.clientY);
+        });
 
-        // Movimiento aleatorio hacia afuera
-        const dx = (Math.random() - 0.5) * 300;
-        const dy = (Math.random() - 0.5) * 300;
-        const rot = Math.random() * 720;
-
-        palabra.style.transform = translate(${dx}px, ${dy}px) rotate(${rot}deg);
-        palabra.style.opacity = "0";
-
-        // Eliminar cuando termine
-        setTimeout(() => palabra.remove(), 3000);
-    }
-});
-</script>
+        // PC
+        document.addEventListener("click", (e) => {
+            explosion(e.clientX, e.clientY);
+        });
+    </script>
 
 </body>
 </html>
-
-
