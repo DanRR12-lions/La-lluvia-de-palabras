@@ -68,7 +68,7 @@
 // Palabras que van a caer
 const words = [
     "bonita", "preciosa", "me encantas", "tu risa", "tu forma de ser ❤",
-    "me gustas", "eres especial", "tus ojitos", "tu voz", "Fer",
+    "me gustas", "eres especial", "todo de ti", "tu voz", "Fer",
     "eres increíble", "me haces feliz", "💗", "✨", "😊", "💕"
 ];
 
@@ -86,8 +86,43 @@ function createWord() {
 }
 
 setInterval(createWord, 300);
+    // Explosión de palabras al tocar/click
+document.addEventListener("click", e => {
+    for (let i = 0; i < 20; i++) {
+        const palabra = document.createElement("div");
+        palabra.textContent = words[Math.floor(Math.random() * words.length)];
+        palabra.className = "word";
+
+        // Punto inicial: donde tocaste
+        palabra.style.left = e.clientX + "px";
+        palabra.style.top = e.clientY + "px";
+
+        // Sin animación de caída
+        palabra.style.animation = "none";
+        palabra.style.opacity = "1";
+        palabra.style.transform = "translate(0, 0) rotate(0deg)";
+        palabra.style.transition = "transform 3s ease-out, opacity 3s ease-out";
+
+        document.body.appendChild(palabra);
+
+        // Forzar reflow
+        void palabra.offsetWidth;
+
+        // Movimiento aleatorio hacia afuera
+        const dx = (Math.random() - 0.5) * 300;
+        const dy = (Math.random() - 0.5) * 300;
+        const rot = Math.random() * 720;
+
+        palabra.style.transform = translate(${dx}px, ${dy}px) rotate(${rot}deg);
+        palabra.style.opacity = "0";
+
+        // Eliminar cuando termine
+        setTimeout(() => palabra.remove(), 3000);
+    }
+});
 </script>
 
 </body>
 </html>
+
 
