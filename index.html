@@ -2,12 +2,12 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Para Dannai</title>
+  <title>Para Fer</title>
 
   <!-- Vista previa para WhatsApp / redes sociales -->
-  <meta property="og:title" content="Para Dannai" />
-  <meta property="og:description" content="Una lluvia infinita 💖" />
-  <meta property="og:image" content="https://via.placeholder.com/600x300/ff69b4/ffffff?text=Para+Dannai" />
+  <meta property="og:title" content="Para Fer" />
+  <meta property="og:description" content="Una lluvia infinita de amor 💖" />
+  <meta property="og:image" content="https://via.placeholder.com/600x300/ff69b4/ffffff?text=Para+Fer" />
   <meta property="og:url" content="https://tu-usuario.github.io/tu-repo/" />
   <meta property="og:type" content="website" />
 
@@ -46,7 +46,12 @@
 <body>
 
 <script>
-  const palabras = ["te quiero", "me gustas", "me encantas", "te adoro"];
+  // Palabras personalizadas para Fer
+  const palabras = [
+    "te quiero Fer",
+    "me gustas Fer",
+    "me encantas Fer"
+  ];
 
   // Lluvia constante
   function crearPalabra() {
@@ -83,7 +88,7 @@
       const dy = (Math.random() - 0.5) * 300;
       const rot = Math.random() * 720;
 
-      palabra.style.transform = `translate(${dx}px, ${dy}px) rotate(${rot}deg)`;
+      palabra.style.transform = translate(${dx}px, ${dy}px) rotate(${rot}deg);
       palabra.style.opacity = "0";
 
       setTimeout(() => palabra.remove(), 3000);
