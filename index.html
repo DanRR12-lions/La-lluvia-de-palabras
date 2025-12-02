@@ -1,178 +1,97 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Para Fer ❤</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lluvia de Palabras</title>
 
-  <!-- OPEN GRAPH / PREVIEW -->
-  <meta property="og:title" content="Para Fer ❤">
-  <meta property="og:description" content="Una lluvia infinita de palabras para ti.">
-  <meta property="og:image" content="https://danrr12-lions.github.io/La-lluvia-de-palabras/fer-preview.jpg">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://danrr12-lions.github.io/La-lluvia-de-palabras/">
-  <meta name="twitter:card" content="summary_large_image">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: black;
+            font-family: Arial, sans-serif;
+            position: relative;
+        }
 
-  <style>
-    :root {
-      --bg1: #000000;
-      --accent: #ff69b4;
-      --text: #fff;
-    }
-    html,body { height:100%; margin:0; }
-    body {
-      background: var(--bg1);
-      color: var(--text);
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-      overflow: hidden;
-      position: relative;
-    }
+        .word {
+            position: absolute;
+            color: white;
+            font-size: 24px;
+            white-space: nowrap;
+            user-select: none;
+            pointer-events: none;
+            animation: fall linear forwards;
+        }
 
-    h1 {
-      position: absolute;
-      top: 18px;
-      width: 100%;
-      text-align: center;
-      font-size: 28px;
-      margin: 0;
-      z-index: 30;
-      color: var(--text);
-      text-shadow: 0 2px 10px rgba(0,0,0,.6);
-    }
+        @keyframes fall {
+            from { transform: translateY(-50px); opacity: 1; }
+            to { transform: translateY(110vh); opacity: 0; }
+        }
 
-    .word {
-      position: absolute;
-      pointer-events: none;
-      user-select: none;
-      color: var(--accent);
-      font-weight: 700;
-      text-shadow:
-        0 0 6px rgba(255,105,180,0.6),
-        0 0 12px rgba(255,20,147,0.25);
-      font-size: 20px;
-      white-space: nowrap;
-      will-change: transform, opacity;
-      z-index: 20;
-      animation: fall linear forwards;
-    }
+        .burst-word {
+            position: absolute;
+            color: #ffdd55;
+            font-size: 22px;
+            pointer-events: none;
+            animation: burst 0.9s ease-out forwards;
+        }
 
-    @keyframes fall {
-      from { transform: translateY(-20vh); opacity: 1; }
-      to   { transform: translateY(120vh); opacity: 0; }
-    }
-
-    #errorBanner {
-      position: fixed;
-      left: 10px;
-      right: 10px;
-      top: 10px;
-      padding: 10px 14px;
-      background: rgba(255,80,80,0.95);
-      color: white;
-      font-weight: 700;
-      border-radius: 8px;
-      display: none;
-      z-index: 60;
-    }
-
-    #helpTip {
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: 16px;
-      background: rgba(0,0,0,0.45);
-      color: #fff;
-      padding: 8px 12px;
-      border-radius: 999px;
-      font-size: 14px;
-      z-index: 40;
-      user-select: none;
-    }
-  </style>
+        @keyframes burst {
+            0% { transform: translate(0,0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--x), var(--y)) scale(0.2); opacity: 0; }
+        }
+    </style>
 </head>
 <body>
 
-  <h1>Fer, esto es para ti 💛</h1>
-
-  <div id="errorBanner">Imagen de preview NO encontrada.</div>
-  <div id="helpTip">Toca o haz clic en la pantalla para una explosión de palabras ✨</div>
-
 <script>
-  const palabras = [
-    "te quiero Fer", "me gustas Fer", "me encantas Fer", "tu risa",
-    "eres especial", "me haces feliz", "tu vibra", "eres increíble",
-    "siempre tú", "tu sonrisa", "💖", "✨"
-  ];
+    const words = ["hola", "mundo", "Daniel", "creatividad", "ideas", "lluvia", "palabras"];
 
-  function crearPalabraAleatoria() {
-    const x = Math.random() * window.innerWidth;
-    crearPalabraEn(x, -60, true);
-  }
-  setInterval(crearPalabraAleatoria, 220);
+    function createFallingWord() {
+        const word = document.createElement("div");
+        word.className = "word";
+        word.innerText = words[Math.floor(Math.random() * words.length)];
 
-  function crearPalabraEn(x, y, isFalling = true, duration = null) {
-    const el = document.createElement('div');
-    el.className = 'word';
-    el.textContent = palabras[Math.floor(Math.random() * palabras.length)];
-    el.style.left = x + 'px';
-    el.style.top = y + 'px';
+        word.style.left = Math.random() * window.innerWidth + "px";
+        word.style.top = "-40px";
 
-    if (isFalling) {
-      const t = (2.2 + Math.random() * 2.8).toFixed(2) + 's';
-      el.style.animationDuration = t;
-    } else {
-      el.style.animation = 'none';
-      el.style.opacity = '1';
-      el.style.transform = 'translate(0,0) rotate(0deg)';
-      el.style.transition =
-        `transform ${duration || 2.6}s cubic-bezier(.2,.9,.2,1),
-         opacity ${duration || 2.6}s ease`;
+        const speed = Math.random() * 3 + 3; 
+        word.style.animationDuration = speed + "s";
+
+        document.body.appendChild(word);
+
+        setTimeout(() => word.remove(), speed * 1000);
     }
 
-    document.body.appendChild(el);
+    setInterval(createFallingWord, 300);
 
-    if (!isFalling) {
-      requestAnimationFrame(() => {
-        const dx = (Math.random() - 0.5) * 360;
-        const dy = (Math.random() - 0.5) * 360;
-        const rot = (Math.random() * 720) * (Math.random() < 0.5 ? -1 : 1);
-        el.style.transform = translate(${dx}px, ${dy}px) rotate(${rot}deg);
-        el.style.opacity = '0';
-      });
-      setTimeout(() => el.remove(), 3200);
-    } else {
-      setTimeout(() => el.remove(), 6000);
+    // ------- EXPLOSIÓN DE PALABRAS EN DONDE TOCAS --------
+    function burst(x, y) {
+        for (let i = 0; i < 10; i++) {
+            const w = document.createElement("div");
+            w.className = "burst-word";
+            w.innerText = words[Math.floor(Math.random() * words.length)];
+
+            w.style.left = x + "px";
+            w.style.top = y + "px";
+
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 100 + Math.random() * 80;
+
+            w.style.setProperty("--x", Math.cos(angle) * distance + "px");
+            w.style.setProperty("--y", Math.sin(angle) * distance + "px");
+
+            document.body.appendChild(w);
+            setTimeout(() => w.remove(), 900);
+        }
     }
-  }
 
-  function explosionEn(x, y, cantidad = 18) {
-    for (let i = 0; i < cantidad; i++) {
-      const jitterX = (Math.random() - 0.5) * 24;
-      const jitterY = (Math.random() - 0.5) * 24;
-      crearPalabraEn(x + jitterX, y + jitterY, false, 2.6 + Math.random() * 0.8);
-    }
-  }
-
-  document.addEventListener('touchstart', ev => {
-    const t = ev.touches[0];
-    explosionEn(t.clientX, t.clientY, 22);
-  }, {passive: true});
-
-  document.addEventListener('click', ev => {
-    explosionEn(ev.clientX, ev.clientY, 20);
-  });
-
-  (function comprobarImagen() {
-    const imgUrl = 'https://danrr12-lions.github.io/La-lluvia-de-palabras/fer-preview.jpg';
-    fetch(imgUrl, { method: 'GET', cache: 'no-store' })
-      .then(resp => {
-        document.getElementById('errorBanner').style.display =
-          resp.ok ? 'none' : 'block';
-      })
-      .catch(() => {
-        document.getElementById('errorBanner').style.display = 'block';
-      });
-  })();
+    document.addEventListener("click", e => burst(e.clientX, e.clientY));
+    document.addEventListener("touchstart", e => {
+        const t = e.touches[0];
+        burst(t.clientX, t.clientY);
+    });
 </script>
 
 </body>
