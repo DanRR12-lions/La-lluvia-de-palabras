@@ -1,99 +1,164 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lluvia de Palabras</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Para Fer 💛</title>
 
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            background: black;
-            font-family: Arial, sans-serif;
-            position: relative;
-        }
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: black;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      position: relative;
+    }
 
-        .word {
-            position: absolute;
-            color: white;
-            font-size: 24px;
-            white-space: nowrap;
-            user-select: none;
-            pointer-events: none;
-            animation: fall linear forwards;
-        }
+    h1 {
+      position: absolute;
+      top: 15px;
+      width: 100%;
+      text-align: center;
+      font-size: 26px;
+      z-index: 20;
+      color: #ffddff;
+      text-shadow: 0 0 10px #ff77cc;
+      user-select: none;
+    }
 
-        @keyframes fall {
-            from { transform: translateY(-50px); opacity: 1; }
-            to { transform: translateY(110vh); opacity: 0; }
-        }
+    #help {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      text-align: center;
+      color: #ffffffaa;
+      font-size: 16px;
+      z-index: 20;
+      user-select: none;
+    }
 
-        .burst-word {
-            position: absolute;
-            color: #ffdd55;
-            font-size: 22px;
-            pointer-events: none;
-            animation: burst 0.9s ease-out forwards;
-        }
+    /* Palabras de lluvia */
+    .word {
+      position: absolute;
+      color: #ff99dd;
+      font-size: 22px;
+      font-weight: bold;
+      text-shadow: 0 0 12px #ff55aa;
+      pointer-events: none;
+      animation: fall linear forwards;
+    }
 
-        @keyframes burst {
-            0% { transform: translate(0,0) scale(1); opacity: 1; }
-            100% { transform: translate(var(--x), var(--y)) scale(0.2); opacity: 0; }
-        }
-    </style>
+    @keyframes fall {
+      from { transform: translateY(-60px); opacity: 1; }
+      to   { transform: translateY(140vh); opacity: 0; }
+    }
+
+    /* Palabras de explosión */
+    .burst-word {
+      position: absolute;
+      color: #ffe680;
+      font-size: 20px;
+      font-weight: bold;
+      pointer-events: none;
+      text-shadow: 0 0 12px #ffcc55;
+      animation: burst 2.2s ease-out forwards;
+    }
+
+    @keyframes burst {
+      0%   { transform: translate(0,0) scale(1); opacity: 1; }
+      100% { transform: translate(var(--x), var(--y)) scale(0.3); opacity: 0; }
+    }
+
+    /* Corazones flotando */
+    .heart {
+      position: absolute;
+      color: #ff5fa2;
+      font-size: 22px;
+      opacity: 0.7;
+      pointer-events: none;
+      animation: floatUp linear forwards;
+      text-shadow: 0 0 10px #ff3d8e;
+    }
+
+    @keyframes floatUp {
+      from { transform: translateY(100vh) scale(1); opacity: 0.8; }
+      to   { transform: translateY(-20vh) scale(1.6); opacity: 0; }
+    }
+  </style>
 </head>
 <body>
 
+  <h1>Fer, esto es para ti 💛</h1>
+  <div id="help">Toca la pantalla para una explosión de palabras ✨</div>
+
 <script>
-    const words = ["hola", "mundo", "Daniel", "creatividad", "ideas", "lluvia", "palabras"];
+  const palabras = [
+    "te quiero Fer", "me gustas", "me encantas",
+    "eres increíble", "tu risa", "tu vibra",
+    "tu sonrisa", "me haces feliz", "siempre tú", "💛", "✨", "💖"
+  ];
 
-    function createFallingWord() {
-        const word = document.createElement("div");
-        word.className = "word";
-        word.innerText = words[Math.floor(Math.random() * words.length)];
+  /* --- LLUVIA SUAVE --- */
+  function caer() {
+    const w = document.createElement("div");
+    w.className = "word";
+    w.innerText = palabras[Math.floor(Math.random() * palabras.length)];
 
-        word.style.left = Math.random() * window.innerWidth + "px";
-        word.style.top = "-40px";
+    w.style.left = Math.random() * window.innerWidth + "px";
+    w.style.top = "-70px";
 
-        const speed = Math.random() * 3 + 3; 
-        word.style.animationDuration = speed + "s";
+    const dur = 4 + Math.random() * 4; // más lento
+    w.style.animationDuration = dur + "s";
 
-        document.body.appendChild(word);
+    document.body.appendChild(w);
+    setTimeout(() => w.remove(), dur * 1000);
+  }
+  setInterval(caer, 300);
 
-        setTimeout(() => word.remove(), speed * 1000);
+  /* --- EXPLOSIÓN SUAVE --- */
+  function explosion(x, y) {
+    for (let i = 0; i < 20; i++) {
+      const w = document.createElement("div");
+      w.className = "burst-word";
+      w.innerText = palabras[Math.floor(Math.random() * palabras.length)];
+
+      w.style.left = x + "px";
+      w.style.top = y + "px";
+
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 150 + Math.random() * 100;
+
+      w.style.setProperty("--x", Math.cos(angle) * dist + "px");
+      w.style.setProperty("--y", Math.sin(angle) * dist + "px");
+
+      document.body.appendChild(w);
+      setTimeout(() => w.remove(), 2200);
     }
+  }
 
-    setInterval(createFallingWord, 300);
+  document.addEventListener("click", e => explosion(e.clientX, e.clientY));
+  document.addEventListener("touchstart", e => {
+    const t = e.touches[0];
+    explosion(t.clientX, t.clientY);
+  });
 
-    // ------- EXPLOSIÓN DE PALABRAS EN DONDE TOCAS --------
-    function burst(x, y) {
-        for (let i = 0; i < 10; i++) {
-            const w = document.createElement("div");
-            w.className = "burst-word";
-            w.innerText = words[Math.floor(Math.random() * words.length)];
+  /* --- CORAZONES FLOTANDO --- */
+  function corazones() {
+    const h = document.createElement("div");
+    h.className = "heart";
+    h.innerText = "💗";
 
-            w.style.left = x + "px";
-            w.style.top = y + "px";
+    h.style.left = Math.random() * window.innerWidth + "px";
 
-            const angle = Math.random() * Math.PI * 2;
-            const distance = 100 + Math.random() * 80;
+    const dur = 6 + Math.random() * 5;
+    h.style.animationDuration = dur + "s";
 
-            w.style.setProperty("--x", Math.cos(angle) * distance + "px");
-            w.style.setProperty("--y", Math.sin(angle) * distance + "px");
-
-            document.body.appendChild(w);
-            setTimeout(() => w.remove(), 900);
-        }
-    }
-
-    document.addEventListener("click", e => burst(e.clientX, e.clientY));
-    document.addEventListener("touchstart", e => {
-        const t = e.touches[0];
-        burst(t.clientX, t.clientY);
-    });
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), dur * 1000);
+  }
+  setInterval(corazones, 900);
 </script>
 
 </body>
-</html> 
-
+</html>
